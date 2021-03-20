@@ -15,10 +15,10 @@
             <directory suffix="Test.php">tests/Feature</directory>
         </testsuite>
         <testsuite name="Functional tests">
-            <directory suffix="Test.php">tests/functional/</directory>
+            <directory suffix="Test.php">tests/Functional/</directory>
         </testsuite>
         <testsuite name="Integration tests">
-            <directory suffix="Test.php">tests/integration/</directory>
+            <directory suffix="Test.php">tests/Integration/</directory>
         </testsuite>
     </testsuites>
     <coverage processUncoveredFiles="true">
@@ -40,5 +40,5 @@
         <server name="SESSION_DRIVER" value="array"/>
         <server name="TELESCOPE_ENABLED" value="false"/>
     </php>
-    
+
 </phpunit>
