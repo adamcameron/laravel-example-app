@@ -1,0 +1,84 @@
+version: '2'
+
+services:
+    nginx:
+        build:
+            context: ./nginx
+        volumes:
+            - appRoot:/usr/share/laravelExampleApp
+            - ../var/log:/var/log
+            - ./nginx/root_home/.ash_history:/root/.ash_history
+        ports:
+            - "8082:80"
+        stdin_open: true # docker run -i
+        tty: true        # docker run -t
+        networks:
+          backend:
+            aliases:
+              - laravel-example-app.adam-cameron
+        extra_hosts:
+            - "service-only-containers.adam-cameron:127.0.0.1"
+        depends_on:
+              - "php-fpm"
+
+    php-fpm:
+        build:
+            context: ./php-fpm
+        environment:
+          - MYSQL_DATABASE=${MYSQL_DATABASE}
+          - MYSQL_USER=${MYSQL_USER}
+          - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+        volumes:
+            - type: bind
+              source: ./php-fpm/root_home/.bash_history
+              target: /root/.bash_history
+            - type: volume
+              source: appRoot
+              target: /usr/share/laravelExampleApp
+        stdin_open: true
+        tty: true
+        networks:
+            - backend
+
+    sftp:
+        build:
+            context: ./sftp
+        volumes:
+          - type: bind
+            source: ./sftp/root_home/.bash_history
+            target: /root/.bash_history
+          - type: volume
+            source: appRoot
+            target: /home/sftpUser/upload/laravelExampleApp
+        ports:
+            - "2222:22"
+        stdin_open: true
+        tty: true
+        command: sftpUser:sftpUser:1001
+
+    mariadb:
+      build:
+        context: ./mariadb
+      environment:
+        - MYSQL_ROOT_PASSWORD=${DATABASE_ROOT_PASSWORD}
+        - MYSQL_DATABASE=${MYSQL_DATABASE}
+        - MYSQL_USER=${MYSQL_USER}
+        - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      ports:
+        - "3306:3306"
+      volumes:
+        - ../var/lib/mysql:/var/lib/mysql
+        - ./mariadb/root_home:/root
+      stdin_open: true
+      tty: true
+      networks:
+        backend:
+          aliases:
+            - database.backend
+
+volumes:
+    appRoot:
+
+networks:
+  backend:
+    driver: "bridge"
