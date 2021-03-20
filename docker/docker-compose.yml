@@ -17,7 +17,7 @@ services:
             aliases:
               - laravel-example-app.adam-cameron
         extra_hosts:
-            - "service-only-containers.adam-cameron:127.0.0.1"
+            - "laravel-example-app.adam-cameron:127.0.0.1"
         depends_on:
               - "php-fpm"
 
