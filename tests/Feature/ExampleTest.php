@@ -2,15 +2,13 @@
 
 namespace adamCameron\laravelExampleApp\tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use adamCameron\laravelExampleApp\tests\TestCase;
 
 class ExampleTest extends TestCase
 {
     /**
-     * A basic test example.
-     *
-     * @return void
+     * @testDox It should return 200OK from a GET request to /
+     * @coversNothing
      */
     public function testBasicTest()
     {
